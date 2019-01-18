@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import List
 
@@ -24,8 +24,13 @@ class Pokemon:
     abilities: List[str]
 
 
-pikachu = Pokemon('Pikachu', 25, Type.electric, ['static', 'lightning rod'])
+pikachu = Pokemon(
+    name='Pikachu',
+    pokedex=25,
+    type=Type.electric,
+    abilities=['static', 'lightning rod']
+)
 
-blob = pikachu.to_blob()
-pikachu_from_blob = Pokemon.from_blob(blob)
+blob = pikachu.dumps()
+pikachu_from_blob = Pokemon.loads(blob)
 assert pikachu == pikachu_from_blob

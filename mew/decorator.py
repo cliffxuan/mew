@@ -59,6 +59,7 @@ def is_serializable(t):
 
 def serializable(t):
     if not is_serializable(t):
+        # TODO specified which types are not supported
         raise NotSupported(f"unsupported types")
     t.dumps = dumps
     t.loads = classmethod(loads)

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import os
-import re
 import sys
 
 from codecs import open
@@ -21,6 +20,7 @@ requires = []
 test_requirements = [
     'hypothesis',
     'dateutils',
+    'flake8',
     'pytest-cov',
     'pytest>=2.8.0'
 ]

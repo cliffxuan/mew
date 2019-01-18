@@ -10,8 +10,7 @@ from hypothesis import given, note, settings
 from hypothesis import strategies as st
 from hypothesis.extra.dateutil import timezones
 
-from mew import NotSupported, serializable
-from mew.serializer import to_pascal_case
+from mew import NotSupported, serializable, to_pascal_case, from_pascal_case
 
 
 def test_not_supported():
@@ -23,6 +22,7 @@ def test_not_supported():
             name: typing.Callable
 
 
+# TODO generate types?
 class GeoPosition(typing.NamedTuple):
     latitude: float
     longitude: float
@@ -138,17 +138,17 @@ def student(
 
 @given(address())
 def test_address(address):
-    blob = address.dumps(convert_case=to_pascal_case)
+    blob = address.dumps(convert_key=to_pascal_case)
     # make sure all keys are included and with the correct case
     assert "DoorNumber" in blob
     assert "HouseName" in blob
     assert "StreetName" in blob
-    assert address == Address.loads(blob)
+    assert address == Address.loads(blob, convert_key=from_pascal_case)
 
 
 @given(teacher())
 def test_teacher(teacher):
-    blob = teacher.dumps(convert_case=to_pascal_case)
+    blob = teacher.dumps(convert_key=to_pascal_case)
     # parent keys
     assert "Id" in blob
     assert "Name" in blob
@@ -157,12 +157,15 @@ def test_teacher(teacher):
     assert "DoorNumber" in blob
     assert "HouseName" in blob
     assert "StreetName" in blob
-    assert teacher == Teacher.loads(teacher.dumps())
+    assert teacher == Teacher.loads(
+        teacher.dumps(),
+        convert_key=from_pascal_case
+    )
 
 
 @given(lecture())
 def test_lecture(lecture):
-    blob = lecture.dumps(convert_case=to_pascal_case)
+    blob = lecture.dumps(convert_key=to_pascal_case)
     # parent keys
     assert "Id" in blob
     assert "Name" in blob
@@ -171,7 +174,7 @@ def test_lecture(lecture):
     assert "DoorNumber" in blob
     assert "HouseName" in blob
     assert "StreetName" in blob
-    assert lecture == Lecture.loads(blob)
+    assert lecture == Lecture.loads(blob, convert_key=from_pascal_case)
 
 
 @given(student())
@@ -179,4 +182,4 @@ def test_lecture(lecture):
 def test_student(student):
     blob = student.dumps()
     note(f"student: {student}")
-    assert student == Student.loads(blob)
+    assert student == Student.loads(blob, convert_key=from_pascal_case)
