@@ -138,17 +138,17 @@ def student(
 
 @given(address())
 def test_address(address):
-    blob = address.to_blob(convert_case=to_pascal_case)
+    blob = address.dumps(convert_case=to_pascal_case)
     # make sure all keys are included and with the correct case
     assert "DoorNumber" in blob
     assert "HouseName" in blob
     assert "StreetName" in blob
-    assert address == Address.from_blob(blob)
+    assert address == Address.loads(blob)
 
 
 @given(teacher())
 def test_teacher(teacher):
-    blob = teacher.to_blob(convert_case=to_pascal_case)
+    blob = teacher.dumps(convert_case=to_pascal_case)
     # parent keys
     assert "Id" in blob
     assert "Name" in blob
@@ -157,12 +157,12 @@ def test_teacher(teacher):
     assert "DoorNumber" in blob
     assert "HouseName" in blob
     assert "StreetName" in blob
-    assert teacher == Teacher.from_blob(teacher.to_blob())
+    assert teacher == Teacher.loads(teacher.dumps())
 
 
 @given(lecture())
 def test_lecture(lecture):
-    blob = lecture.to_blob(convert_case=to_pascal_case)
+    blob = lecture.dumps(convert_case=to_pascal_case)
     # parent keys
     assert "Id" in blob
     assert "Name" in blob
@@ -171,12 +171,12 @@ def test_lecture(lecture):
     assert "DoorNumber" in blob
     assert "HouseName" in blob
     assert "StreetName" in blob
-    assert lecture == Lecture.from_blob(blob)
+    assert lecture == Lecture.loads(blob)
 
 
 @given(student())
 @settings(max_examples=16)
 def test_student(student):
-    blob = student.to_blob()
+    blob = student.dumps()
     note(f"student: {student}")
-    assert student == Student.from_blob(blob)
+    assert student == Student.loads(blob)

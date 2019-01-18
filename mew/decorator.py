@@ -23,14 +23,6 @@ directly_supported_types = [
 ]
 
 
-def to_blob(self, *args, **kwargs) -> str:
-    return dumps(self, *args, **kwargs)
-
-
-def from_blob(cls, data: str):
-    return loads(data, cls)
-
-
 def is_namedtuple(t):
     b = t.__bases__
     if len(b) != 1 or b[0] != tuple:
@@ -41,33 +33,33 @@ def is_namedtuple(t):
     return all(type(n) == str for n in f)
 
 
-def is_serializable(klass):
-    if klass in directly_supported_types:
+def is_serializable(t):
+    if t in directly_supported_types:
         return True
-    if is_dataclass(klass):
+    if is_dataclass(t):
         return all(
             is_serializable(v.type)
-            for v in klass.__dataclass_fields__.values()
+            for v in t.__dataclass_fields__.values()
         )
-    if isinstance(klass, type):  # if it's a class
-        if issubclass(klass, enum.Enum):
+    if isinstance(t, type):  # if it's a class
+        if issubclass(t, enum.Enum):
             return True
-        if is_namedtuple(klass):
-            return all(is_serializable(v) for v in klass._field_types.values())
-    if hasattr(klass, "__origin__"):
-        origin = klass.__origin__
+        if is_namedtuple(t):
+            return all(is_serializable(v) for v in t._field_types.values())
+    if hasattr(t, "__origin__"):  # if it's a type in typing module
+        origin = t.__origin__
         if origin == typing.Union:
-            return all(is_serializable(arg) for arg in klass.__args__)
+            return all(is_serializable(arg) for arg in t.__args__)
         if origin == list:
-            return is_serializable(klass.__args__[0])
+            return is_serializable(t.__args__[0])
         # TODO more
         return False
     return False
 
 
-def serializable(klass):
-    if not is_serializable(klass):
+def serializable(t):
+    if not is_serializable(t):
         raise NotSupported(f"unsupported types")
-    klass.to_blob = to_blob
-    klass.from_blob = classmethod(from_blob)
-    return klass
+    t.dumps = dumps
+    t.loads = classmethod(loads)
+    return t

@@ -53,41 +53,41 @@ def serialize(
     return obj
 
 
-def deserialize(value, annotation):
-    if annotation in [str, int, float, bool, type(None)]:
+def deserialize(value, t):
+    if t in [str, int, float, bool, type(None)]:
         return value
 
-    if annotation == uuid.UUID:
+    if t == uuid.UUID:
         return uuid.UUID(value)
 
-    if annotation == dt.datetime:
+    if t == dt.datetime:
         return dt.datetime.fromisoformat(value)
 
-    if is_dataclass(annotation):
-        return annotation(
+    if is_dataclass(t):
+        return t(
             **{
                 from_pascal_case(k): deserialize(
                     v,
-                    annotation.__dataclass_fields__[from_pascal_case(k)].type,
+                    t.__dataclass_fields__[from_pascal_case(k)].type,
                 )
                 for k, v in value.items()
             }
         )
 
-    if isinstance(annotation, type):
-        if issubclass(annotation, enum.Enum):
-            for item in annotation:
+    if isinstance(t, type):
+        if issubclass(t, enum.Enum):
+            for item in t:
                 if item.value == value:
                     return item
             raise Exception(
-                f"cannot find an item in Enum {annotation} with value {value}"
+                f"cannot find an item in Enum {t} with value {value}"
             )
-        if issubclass(annotation, tuple):
-            return annotation(*value)
+        if issubclass(t, tuple):
+            return t(*value)
 
-    if hasattr(annotation, "__origin__") and hasattr(annotation, "__args__"):
-        origin = annotation.__origin__
-        args = annotation.__args__
+    if hasattr(t, "__origin__") and hasattr(t, "__args__"):
+        origin = t.__origin__
+        args = t.__args__
         if origin == list:
             return [deserialize(item, args[0]) for item in value]
         if origin == Union:
@@ -97,10 +97,10 @@ def deserialize(value, annotation):
                 except TypeError:
                     pass
             raise Exception(
-                f"cannot convert type {annotation} for value {value}"
+                f"cannot convert type {t} for value {value}"
             )
         # TODO more...
-    raise Exception(f"unsupported type {annotation} for value {value}")
+    raise Exception(f"unsupported type {t} for value {value}")
 
 
 def dumps(o, *args, **kwargs):
@@ -109,9 +109,9 @@ def dumps(o, *args, **kwargs):
     return json.dumps(serialized, *args, **kwargs)
 
 
-def loads(data, annotation):
+def loads(t, data):
     data_asdict = json.loads(data)
-    return deserialize(data_asdict, annotation)
+    return deserialize(data_asdict, t)
 
 
 def to_pascal_case(name):

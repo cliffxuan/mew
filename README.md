@@ -33,8 +33,8 @@ class Pokemon:
 >>> pikachu
 Pokemon(name='Pikachu', pokedex=25, type=<Type.electric: 'electric'>, abilities=['static', 'lightning rod'])
 
->>> pikachu.to_blob()
+>>> pikachu.dumps()
 '{"name": "Pikachu", "pokedex": 25, "type": "electric", "abilities": ["static", "lightning rod"]}'
 
->>> assert pikachu == Pokemon.from_blob(pikachu.to_blob())
+>>> assert pikachu == Pokemon.loads(pikachu.dumps())
 ```
