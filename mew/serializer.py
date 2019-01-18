@@ -102,7 +102,7 @@ def deserialize(t, value, convert_key: Callable = lambda x: x):
             raise Exception(
                 f"cannot convert type {t} for value {value}"
             )
-        # TODO more...
+        # TODO convert more of type.XXX
     raise Exception(f"unsupported type {t} for value {value}")
 
 

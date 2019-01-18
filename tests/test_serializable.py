@@ -23,6 +23,7 @@ def test_not_supported():
 
 
 # TODO generate types?
+# IDEA use schema.org?
 class GeoPosition(typing.NamedTuple):
     latitude: float
     longitude: float

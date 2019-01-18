@@ -52,7 +52,7 @@ def is_serializable(t):
             return all(is_serializable(arg) for arg in t.__args__)
         if origin == list:
             return is_serializable(t.__args__[0])
-        # TODO more
+        # TODO covert more of typing.XXX
         return False
     return False
 
