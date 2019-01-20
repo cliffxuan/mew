@@ -15,11 +15,14 @@ from mew import NotSupported, serializable, to_pascal_case, from_pascal_case
 
 def test_not_supported():
 
-    with pytest.raises(NotSupported):
+    with pytest.raises(NotSupported) as error:
 
         @serializable
+        @dataclass
         class Foo:
             name: typing.Callable
+
+    assert error.value.type == typing.Callable
 
 
 # TODO generate types?
@@ -179,7 +182,7 @@ def test_lecture(lecture):
 
 
 @given(student())
-@settings(max_examples=16)
+@settings(max_examples=10)
 def test_student(student):
     blob = student.dumps()
     note(f"student: {student}")
