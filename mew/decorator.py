@@ -14,8 +14,8 @@ from mew.serializer import dumps, loads
 class NotSupported(Exception):
     """not supported"""
 
-    def __init__(self, _type, message):
-        self.type = _type
+    def __init__(self, types, message):
+        self.types = types
         self.message = message
 
 
@@ -37,58 +37,50 @@ def is_namedtuple(t):
     return all(type(n) == str for n in f)
 
 
-# TODO make return type a custom class
-def is_serializable(t) -> typing.Tuple[bool, typing.Optional[typing.Any]]:
+def find_unsupported(t) -> typing.List[typing.Any]:
     if t in directly_supported_types:
-        return True, None
-    if is_dataclass(t):
-        unsupported = [
-            v
-            for v in t.__dataclass_fields__.values()
-            if not is_serializable(v.type)[0]
-        ]
-        if unsupported:
-            return False, unsupported[0].type
-        else:
-            return True, None
+        return []
     if isinstance(t, type):  # if it's a class
         if issubclass(t, enum.Enum):
-            return True, None
+            return []
+        if is_dataclass(t):
+            unsupported = [
+                v.type
+                for v in t.__dataclass_fields__.values()
+                if find_unsupported(v.type)
+            ]
+            return unsupported
         if is_namedtuple(t):
             unsupported = [
                 v
                 for v in t._field_types.values()
-                if not is_serializable(v)[0]
+                if find_unsupported(v)
             ]
-            if unsupported:
-                return False, unsupported[0]
-            else:
-                return True, None
+            return unsupported
     if hasattr(t, "__origin__"):  # if it's a type in typing module
         origin = t.__origin__
         if origin == typing.Union:
             unsupported = [
                 arg
                 for arg in t.__args__
-                if not is_serializable(arg)[0]
+                if find_unsupported(arg)
             ]
-            if unsupported:
-                return False, unsupported[0]
-            else:
-                return True, None
+            return unsupported
         if origin == list:
-            return is_serializable(t.__args__[0])
+            return find_unsupported(t.__args__[0])
         # TODO covert more of typing.XXX
-        return False, t
-    return False, t
+        return [t]
+    return [t]
 
 
 def serializable(t):
     """adds dumps() and loads() to the class"""
-    is_ok, unsupported = is_serializable(t)
-    if not is_ok:
+    unsupported_types = find_unsupported(t)
+    if unsupported_types:
         # TODO specified which types are not supported
-        raise NotSupported(unsupported, f"unsupported type {unsupported}")
+        raise NotSupported(
+            unsupported_types, f"unsupported type {unsupported_types}"
+        )
     t.dumps = dumps
     t.loads = classmethod(loads)
     return t

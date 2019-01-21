@@ -22,7 +22,7 @@ def test_not_supported():
         class Foo:
             name: typing.Callable
 
-    assert error.value.type == typing.Callable
+    assert error.value.types == [typing.Callable]
 
 
 # TODO generate types?
