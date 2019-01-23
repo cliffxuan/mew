@@ -67,7 +67,6 @@ def deserialize(t, value, convert_key: Callable = lambda x: x):
     if is_dataclass(t):
         return t(
             **{
-                # TODO parameterize from_pascal_case
                 convert_key(k): deserialize(
                     t.__dataclass_fields__[convert_key(k)].type,
                     v,

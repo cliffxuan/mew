@@ -19,11 +19,11 @@ class NotSupported(Exception):
         self.message = message
 
 
-scalar_types = [str, int, float, bool, type(None)]
-directly_supported_types = [
+primitive_types = [str, int, float, bool, type(None)]
+scalar_types = [
     uuid.UUID,
     dt.datetime,
-    *scalar_types,
+    *primitive_types,
 ]
 
 
@@ -38,7 +38,7 @@ def is_namedtuple(t):
 
 
 def find_unsupported(t) -> typing.List[typing.Any]:
-    if t in directly_supported_types:
+    if t in scalar_types:
         return []
     if isinstance(t, type):  # if it's a class
         if issubclass(t, enum.Enum):
@@ -77,7 +77,6 @@ def serializable(t):
     """adds dumps() and loads() to the class"""
     unsupported_types = find_unsupported(t)
     if unsupported_types:
-        # TODO specified which types are not supported
         raise NotSupported(
             unsupported_types, f"unsupported type {unsupported_types}"
         )
