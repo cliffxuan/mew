@@ -25,6 +25,14 @@ def serialize(
     if isinstance(obj, uuid.UUID):
         return str(obj)
 
+    # Format date as YYYY-MM-DD
+    if isinstance(obj, dt.date):
+        return obj.isoformat()
+
+    # Format time as HH:MM:SS.ffffff
+    if isinstance(obj, dt.time):
+        return obj.isoformat()
+
     # Format datetimes as ISO-8601 w/ timezone.
     if isinstance(obj, dt.datetime):
         return obj.isoformat()

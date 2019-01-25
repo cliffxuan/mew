@@ -22,7 +22,9 @@ class NotSupported(Exception):
 primitive_types = [str, int, float, bool, type(None)]
 scalar_types = [
     uuid.UUID,
+    dt.date,
     dt.datetime,
+    dt.time,
     *primitive_types,
 ]
 
