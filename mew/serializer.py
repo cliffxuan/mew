@@ -5,10 +5,16 @@ import json
 import uuid
 from collections.abc import Collection, Mapping
 from typing import Any, Callable, Union
-
 from dataclasses import asdict, is_dataclass
 
+import yaml
+
 UTC = dt.timezone.utc
+
+SUPPORTED_FORMATS = ('json', 'yaml')
+
+# TODO validate
+# types may not match
 
 
 def serialize(
@@ -118,11 +124,30 @@ def deserialize(t, value, convert_key: Callable = lambda x: x):
     raise Exception(f"unsupported type {t} for value {value}")
 
 
-def dumps(o, *, convert_key: Callable = lambda x: x, **kwargs):
+def dumps(
+    o, *, format: str = 'json', convert_key: Callable = lambda x: x, **kwargs
+):
     serialized = serialize(o, convert_key=convert_key)
-    return json.dumps(serialized, **kwargs)
+    if format == 'json':
+        return json.dumps(serialized, **kwargs)
+    if format == 'yaml':
+        return yaml.dump(serialized, **kwargs)
+    raise ValueError(
+        f'supported formats are {",".join(SUPPORTED_FORMATS)}.'
+        f' found {format}'
+    )
 
 
-def loads(t, data, convert_key: Callable = lambda x: x):
-    data_asdict = json.loads(data)
+def loads(
+    t, data, format: str = 'json', convert_key: Callable = lambda x: x
+):
+    if format == 'json':
+        data_asdict = json.loads(data)
+    elif format == 'yaml':
+        data_asdict = yaml.load(data)
+    else:
+        raise ValueError(
+            f'supported formats are {",".join(SUPPORTED_FORMATS)}.'
+            f' found {format}'
+        )
     return deserialize(t, data_asdict, convert_key)

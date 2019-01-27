@@ -16,7 +16,9 @@ if sys.argv[-1] == 'publish':
 
 packages = ['mew']
 
-requires = []
+requires = [
+    'pyyaml'
+]
 test_requirements = [
     'hypothesis',
     'dateutils',
