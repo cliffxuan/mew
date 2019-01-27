@@ -118,10 +118,9 @@ def deserialize(t, value, convert_key: Callable = lambda x: x):
     raise Exception(f"unsupported type {t} for value {value}")
 
 
-def dumps(o, *args, **kwargs):
-    convert_key = kwargs.pop('convert_key', lambda x: x)
+def dumps(o, *, convert_key: Callable = lambda x: x, **kwargs):
     serialized = serialize(o, convert_key=convert_key)
-    return json.dumps(serialized, *args, **kwargs)
+    return json.dumps(serialized, **kwargs)
 
 
 def loads(t, data, convert_key: Callable = lambda x: x):
