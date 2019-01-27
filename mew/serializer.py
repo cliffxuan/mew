@@ -17,9 +17,8 @@ def serialize(
 ) -> Any:
     """
     Takes an object and returns a representation of that object
-    that can be json encoded. If no special behaviour is known
-    for the object then the object itself will be returned unless
-    a default conversion function has been provided.
+    which can be json encoded. If no special behaviour is known
+    for the object then the object itself will be returned.
     """
     # Format as "10fb6968-6b54-44c8-9365-e0b3934ae156".
     if isinstance(obj, uuid.UUID):
@@ -71,6 +70,12 @@ def deserialize(t, value, convert_key: Callable = lambda x: x):
 
     if t == dt.datetime:
         return dt.datetime.fromisoformat(value)
+
+    if t == dt.date:
+        return dt.date.fromisoformat(value)
+
+    if t == dt.time:
+        return dt.time.fromisoformat(value)
 
     if is_dataclass(t):
         return t(

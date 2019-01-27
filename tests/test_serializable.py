@@ -33,9 +33,9 @@ class GeoPosition(typing.NamedTuple):
 
 
 class Subject(Enum):
-    mathmatics = 0
-    english = 1
-    computing = 2
+    MATHMATICS = 0
+    ENGLISH = 1
+    COMPUTING = 2
 
 
 @serializable
@@ -103,13 +103,6 @@ def address(
 
 
 @st.composite
-def timestamps(
-    draw, timestamp=st.datetimes(timezones=timezones())
-) -> dt.datetime:
-    return draw(timestamp)
-
-
-@st.composite
 def teacher(draw, id=st.uuids(), name=st.text(), address=address()) -> Teacher:
     return Teacher(draw(id), draw(name), draw(address))
 
@@ -119,7 +112,7 @@ def lecture(
     draw,
     id=st.uuids(),
     name=st.text(),
-    timestamp=timestamps(),
+    timestamp=st.datetimes(timezones=timezones()),
     teacher=teacher(),
     subject=st.sampled_from(Subject),
 ) -> Lecture:
