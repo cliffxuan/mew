@@ -17,6 +17,7 @@ if sys.argv[-1] == 'publish':
 packages = ['mew']
 
 requires = [
+    'dataclasses;python_version<"3.7"',
     'pyyaml'
 ]
 test_requirements = [
@@ -59,5 +60,6 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: CPython'
     ],
+    setup_requires=["pytest-runner"],
     tests_require=test_requirements
 )
