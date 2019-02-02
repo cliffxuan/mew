@@ -2,7 +2,7 @@
 import datetime as dt
 import typing
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from enum import Enum
 
 import pytest

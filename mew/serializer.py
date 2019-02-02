@@ -2,12 +2,17 @@
 import datetime as dt
 import enum
 import json
+import sys
 import uuid
 from collections.abc import Collection, Mapping
-from typing import Any, Callable, Union
+from typing import Any, Callable, List, Union
 from dataclasses import asdict, is_dataclass
 
 import yaml
+if sys.version_info < (3, 7):
+    # fromisoformat() is for python version >= 3.7
+    from dateutil.parser import parse
+
 
 UTC = dt.timezone.utc
 
@@ -75,13 +80,23 @@ def deserialize(t, value, convert_key: Callable = lambda x: x):
         return uuid.UUID(value)
 
     if t == dt.datetime:
-        return dt.datetime.fromisoformat(value)
+        # TODO timezone?
+        try:
+            return dt.datetime.fromisoformat(value)
+        except AttributeError: # python3.6 doesn't have fromisoformat()
+            return parse(value)
 
     if t == dt.date:
-        return dt.date.fromisoformat(value)
+        try:
+            return dt.date.fromisoformat(value)
+        except AttributeError: # python3.6 doesn't have fromisoformat()
+            return parse(value)
 
     if t == dt.time:
-        return dt.time.fromisoformat(value)
+        try:
+            return dt.time.fromisoformat(value)
+        except AttributeError: # python3.6 doesn't have fromisoformat()
+            return parse(value)
 
     if is_dataclass(t):
         return t(
@@ -109,7 +124,7 @@ def deserialize(t, value, convert_key: Callable = lambda x: x):
     if hasattr(t, "__origin__") and hasattr(t, "__args__"):
         origin = t.__origin__
         args = t.__args__
-        if origin == list:
+        if origin in (list, List):
             return [deserialize(args[0], item, convert_key) for item in value]
         if origin == Union:
             for arg in args:

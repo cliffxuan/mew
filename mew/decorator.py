@@ -68,7 +68,7 @@ def find_unsupported(t) -> typing.List[typing.Any]:
                 if find_unsupported(arg)
             ]
             return unsupported
-        if origin == list:
+        if origin in (list, typing.List):
             return find_unsupported(t.__args__[0])
         # TODO covert more of typing.XXX
         return [t]
