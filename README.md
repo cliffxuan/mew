@@ -1,5 +1,6 @@
 Mew: python dataclass serializer/deserializer
 =============================================
+[![Build Status](https://travis-ci.org/cliffxuan/mew.svg?branch=master)](https://travis-ci.org/cliffxuan/mew)
 ![image](https://raw.githubusercontent.com/cliffxuan/mew/master/mew.jpg)
 
 ``` {.sourceCode .python}
