@@ -1,7 +1,8 @@
 Mew: python dataclass serializer/deserializer
 =============================================
 [![Build Status](https://travis-ci.org/cliffxuan/mew.svg?branch=master)](https://travis-ci.org/cliffxuan/mew)
-[![PyPI version](https://badge.fury.io/py/mew.svg)](https://badge.fury.io/py/mew)
+[![Python Version Support](https://img.shields.io/pypi/pyversions/mew.svg)](https://img.shields.io/pypi/pyversions/mew.svg)
+[![PyPI Version](https://badge.fury.io/py/mew.svg)](https://badge.fury.io/py/mew)
 ![image](https://raw.githubusercontent.com/cliffxuan/mew/master/mew.jpg)
 
 ``` {.sourceCode .python}
