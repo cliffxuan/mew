@@ -1,9 +1,19 @@
 dist: xenial
+env:
+  global:
+    - CC_TEST_REPORTER_ID=53fd579a819259bf021d8fa7081d58173595d0abf68b666c353ece33734ef636
 language: python
 python:
   - "3.6"
   - "3.7"
 install:
   - pip install coverage
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script:
   - coverage run --source=mew setup.py test
+after_script:
+  - coverage xml
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
