@@ -27,7 +27,7 @@ dependency_links = [
 ]
 test_requirements = [
     'hypothesis',
-    'dateutils',
+    'python-dateutil',
     'flake8',
     'pytest>=2.8.0'
 ]
