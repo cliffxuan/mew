@@ -29,7 +29,6 @@ test_requirements = [
     'hypothesis',
     'dateutils',
     'flake8',
-    'pytest-cov',
     'pytest>=2.8.0'
 ]
 
