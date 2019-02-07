@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-CAP_RE = re.compile('(.)([A-Z])')
+CAP_RE = re.compile("(.)([A-Z])")
 
 
 def to_pascal_case(name):
@@ -15,7 +15,7 @@ def from_pascal_case(name):
     """
     Turn a PascalCase name into snake_case.
     """
-    return CAP_RE.sub(r'\1_\2', name).lower()
+    return CAP_RE.sub(r"\1_\2", name).lower()
 
 
 def to_camel_case(name):

@@ -2,7 +2,7 @@
 import datetime as dt
 import typing
 import uuid
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from enum import Enum
 
 import pytest
@@ -116,13 +116,7 @@ def lecture(
     teacher=teacher(),
     subject=st.sampled_from(Subject),
 ) -> Lecture:
-    return Lecture(
-        draw(id),
-        draw(name),
-        draw(timestamp),
-        draw(teacher),
-        draw(subject),
-    )
+    return Lecture(draw(id), draw(name), draw(timestamp), draw(teacher), draw(subject))
 
 
 @st.composite
@@ -154,10 +148,7 @@ def test_teacher(teacher):
     assert "DoorNumber" in blob
     assert "HouseName" in blob
     assert "StreetName" in blob
-    assert teacher == Teacher.loads(
-        teacher.dumps(),
-        convert_key=from_pascal_case
-    )
+    assert teacher == Teacher.loads(teacher.dumps(), convert_key=from_pascal_case)
 
 
 @given(lecture())

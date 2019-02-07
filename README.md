@@ -4,6 +4,7 @@ Mew: python dataclass serializer/deserializer
 [![Python Version Support](https://img.shields.io/pypi/pyversions/mew.svg)](https://img.shields.io/pypi/pyversions/mew.svg)
 [![PyPI Version](https://badge.fury.io/py/mew.svg)](https://badge.fury.io/py/mew)
 [![Coverage](https://img.shields.io/codeclimate/coverage/cliffxuan/mew.svg?style=flat)](https://codeclimate.com/github/cliffxuan/mew)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 ![image](https://raw.githubusercontent.com/cliffxuan/mew/master/mew.jpg)
 
 ``` {.sourceCode .python}

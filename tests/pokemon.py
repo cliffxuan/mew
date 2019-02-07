@@ -7,12 +7,12 @@ import mew
 
 
 class Type(Enum):
-    normal = 'normal'
-    electric = 'electric'
-    fire = 'fire'
-    fighting = 'fighting'
-    water = 'water'
-    psychic = 'psychic'
+    normal = "normal"
+    electric = "electric"
+    fire = "fire"
+    fighting = "fighting"
+    water = "water"
+    psychic = "psychic"
 
 
 @mew.serializable
@@ -25,10 +25,10 @@ class Pokemon:
 
 
 pikachu = Pokemon(
-    name='Pikachu',
+    name="Pikachu",
     pokedex=25,
     type=Type.electric,
-    abilities=['static', 'lightning rod']
+    abilities=["static", "lightning rod"],
 )
 
 blob = pikachu.dumps()
