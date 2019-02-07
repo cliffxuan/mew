@@ -39,39 +39,39 @@ def is_namedtuple(t):
     return all(type(n) == str for n in f)
 
 
-def find_unsupported(t) -> typing.List[typing.Any]:
+def find_unsupported(t: typing.Any) -> typing.List[typing.Any]:
     if t in scalar_types:
         return []
     if isinstance(t, type):  # if it's a class
         if issubclass(t, enum.Enum):
             return []
         if is_dataclass(t):
-            unsupported = [
+            return [
                 v.type
                 for v in t.__dataclass_fields__.values()
                 if find_unsupported(v.type)
             ]
-            return unsupported
-        if is_namedtuple(t):
-            unsupported = [
+        if is_namedtuple(t) and hasattr(t, '_field_types'):
+            # yes: class Point(typing.NamedTuple):
+            #          x: int
+            #          y: int
+            # no: Point = namedtuple('Point', ['x', 'y'])
+            return [
                 v
                 for v in t._field_types.values()
                 if find_unsupported(v)
             ]
-            return unsupported
     if hasattr(t, "__origin__"):  # if it's a type in typing module
         origin = t.__origin__
         if origin == typing.Union:
-            unsupported = [
+            return [
                 arg
                 for arg in t.__args__
                 if find_unsupported(arg)
             ]
-            return unsupported
-        if origin in (list, typing.List):
+        if origin in (list, typing.List):  # typing.List for python3.6
             return find_unsupported(t.__args__[0])
         # TODO covert more of typing.XXX
-        return [t]
     return [t]
 
 

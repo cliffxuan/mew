@@ -31,6 +31,9 @@ def serialize(
     which can be json encoded. If no special behaviour is known
     for the object then the object itself will be returned.
     """
+    if isinstance(obj, (str, int, float, bool, type(None))):
+        return obj
+
     # Format as "10fb6968-6b54-44c8-9365-e0b3934ae156".
     if isinstance(obj, uuid.UUID):
         return str(obj)
@@ -73,7 +76,7 @@ def serialize(
 # TODO type annotate t
 # TODO code example to use
 def deserialize(t, value, convert_key: Callable = lambda x: x):
-    if t in [str, int, float, bool, type(None)]:
+    if t in (str, int, float, bool, type(None)):
         return value
 
     if t == uuid.UUID:
