@@ -18,6 +18,7 @@ packages = ['mew']
 
 requires = [
     'dataclasses;python_version<"3.7"',
+    'python-dateutil<2.8;python_version<"3.7"',
     'pyyaml'
 ]
 dependency_links = [
