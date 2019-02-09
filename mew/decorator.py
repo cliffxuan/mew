@@ -6,7 +6,7 @@ from dataclasses import is_dataclass
 import enum
 import typing
 
-from mew.serializer import dumps, loads, scalar_types
+from mew.serializer import dumps, loads, SCALAR_TYPES
 
 
 class NotSupported(Exception):
@@ -28,7 +28,7 @@ def is_namedtuple(t):
 
 
 def find_unsupported(t: typing.Any) -> typing.List[typing.Any]:
-    if t in scalar_types:
+    if t in SCALAR_TYPES:
         return []
     if isinstance(t, type):  # if it's a class
         if issubclass(t, enum.Enum):
