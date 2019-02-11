@@ -13,7 +13,9 @@ import yaml
 
 if sys.version_info < (3, 7):
     # fromisoformat() is for python version >= 3.7
-    from dateutil.parser import parse
+    from backports.datetime_fromisoformat import MonkeyPatch
+
+    MonkeyPatch.patch_fromisoformat()
 
 
 NoneType = type(None)
@@ -128,10 +130,7 @@ class DateTimeSerializer(ScalarTypeSerializer):
 
     @staticmethod
     def deserialize(value: str) -> dt.datetime:
-        try:
-            return dt.datetime.fromisoformat(value)
-        except AttributeError:  # python3.6 doesn't have fromisoformat()
-            return parse(value)
+        return dt.datetime.fromisoformat(value)
 
 
 class DateSerializer(ScalarTypeSerializer):
@@ -145,10 +144,7 @@ class DateSerializer(ScalarTypeSerializer):
 
     @staticmethod
     def deserialize(value: str) -> dt.date:
-        try:
-            return dt.date.fromisoformat(value)
-        except AttributeError:  # python3.6 doesn't have fromisoformat()
-            return parse(value).date()
+        return dt.date.fromisoformat(value)
 
 
 class TimeSerializer(ScalarTypeSerializer):
@@ -162,10 +158,7 @@ class TimeSerializer(ScalarTypeSerializer):
 
     @staticmethod
     def deserialize(value: str) -> dt.date:
-        try:
-            return dt.time.fromisoformat(value)
-        except AttributeError:  # python3.6 doesn't have fromisoformat()
-            return parse(value).time()
+        return dt.time.fromisoformat(value)
 
 
 #  class EnumSerializer(ScalarTypeSerializer):
