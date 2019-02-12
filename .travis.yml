@@ -7,13 +7,15 @@ python:
   - "3.6"
   - "3.7"
 install:
-  - pip install coverage
+  - pipenv install -e .
+  - pipenv install --dev
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+  - pip install pipenv
 script:
-  - coverage run --source=mew setup.py test
+  - pytest --cov=mew tests/
 after_script:
   - coverage xml
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

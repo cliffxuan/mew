@@ -17,20 +17,11 @@ if sys.argv[-1] == 'publish':
 packages = ['mew']
 
 requires = [
-    'dataclasses;python_version<"3.7"',
-    'backports-datetime-fromisoformat;python_version<"3.7"',
-    'pyyaml'
-]
-dependency_links = [
     # use fork until this RP is approved:
     # https://github.com/ericvsmith/dataclasses/pull/141
-    'http://github.com/cliffxuan/dataclasses/tarball/master#egg=dataclasses'
-]
-test_requirements = [
-    'hypothesis',
-    'python-dateutil<2.8',
-    'flake8',
-    'pytest>=2.8.0'
+    'dataclasses@http://github.com/cliffxuan/dataclasses/tarball/master#egg=dataclasses',
+    'backports-datetime-fromisoformat;python_version<"3.7"',
+    'pyyaml'
 ]
 
 about = {}
@@ -55,7 +46,6 @@ setup(
     include_package_data=True,
     python_requires=">=3.6",
     install_requires=requires,
-    dependency_links=dependency_links,
     license=about['__license__'],
     zip_safe=False,
     classifiers=[
@@ -65,7 +55,5 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: CPython'
-    ],
-    setup_requires=["pytest-runner"],
-    tests_require=test_requirements
+    ]
 )

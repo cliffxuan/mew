@@ -1,0 +1,15 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+hypothesis = "*"
+python-dateutil = "*"
+pytest = "*"
+mypy = "*"
+pytest-cov = "*"
+
+[packages]
+mew = {editable = true,path = "."}
+backports-datetime-fromisoformat = {markers = "python_version<'3.7'",version = "*"}
