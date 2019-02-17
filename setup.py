@@ -17,9 +17,6 @@ if sys.argv[-1] == 'publish':
 packages = ['mew']
 
 requires = [
-    # use fork until this RP is approved:
-    # https://github.com/ericvsmith/dataclasses/pull/141
-    'dataclasses@http://github.com/cliffxuan/dataclasses/tarball/master#egg=dataclasses',
     'backports-datetime-fromisoformat;python_version<"3.7"',
     'pyyaml'
 ]

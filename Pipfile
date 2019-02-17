@@ -13,3 +13,6 @@ pytest-cov = "*"
 [packages]
 mew = {editable = true,path = "."}
 backports-datetime-fromisoformat = {markers = "python_version<'3.7'",version = "*"}
+# use fork until this RP is approved:
+# https://github.com/ericvsmith/dataclasses/pull/141
+dataclasses = {markers = "python_version<'3.7'",file = "https://github.com/cliffxuan/dataclasses/tarball/master"}
