@@ -7,7 +7,6 @@ verify_ssl = true
 hypothesis = "*"
 python-dateutil = "*"
 pytest = "*"
-mypy = "*"
 pytest-cov = "*"
 
 [packages]
