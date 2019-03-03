@@ -36,7 +36,7 @@ def find_unsupported(t: typing.Any) -> typing.List[typing.Any]:
         if is_dataclass(t):
             return [
                 v.type
-                for v in t.__dataclass_fields__.values()
+                for v in t.__dataclass_fields__.values()  # type: ignore
                 if find_unsupported(v.type)
             ]
         if is_namedtuple(t) and hasattr(t, "_field_types"):
@@ -44,7 +44,10 @@ def find_unsupported(t: typing.Any) -> typing.List[typing.Any]:
             #          x: int
             #          y: int
             # no: Point = namedtuple('Point', ['x', 'y'])
-            return [v for v in t._field_types.values() if find_unsupported(v)]
+            return [
+                v for v in t._field_types.values()  # type: ignore
+                if find_unsupported(v)
+            ]
     if hasattr(t, "__origin__"):  # if it's a type in typing module
         origin = t.__origin__
         if origin == typing.Union:

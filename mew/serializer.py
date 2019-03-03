@@ -6,7 +6,7 @@ import sys
 import uuid
 from abc import ABC, abstractmethod
 from collections.abc import Collection, Mapping
-from typing import Any, Callable, Dict, List, Tuple, Union
+from typing import Any, Callable, Dict, List, Union
 from dataclasses import asdict, is_dataclass
 
 import yaml
@@ -32,13 +32,14 @@ class ScalarTypeSerializer(ABC):
     def type(cls):
         ...
 
+    @staticmethod
     @abstractmethod
-    def serialize(obj: "ScalarTypeSerializer.type"):
+    def serialize(obj: Any) -> Any:
         ...
 
     @staticmethod
     @abstractmethod
-    def deserialize(value) -> "ScalarTypeSerializer.type":
+    def deserialize(value: Any) -> Any:
         ...
 
 
@@ -96,7 +97,7 @@ class BooleanSerializer(ScalarTypeSerializer):
 
 class NoneTypeSerializer:
 
-    type = NoneType
+    type = type(None)
 
     @staticmethod
     def serialize(obj: NoneType) -> NoneType:
@@ -116,7 +117,7 @@ class UUIDSerializer(ScalarTypeSerializer):
         return str(obj)
 
     @staticmethod
-    def deserialize(value: str) -> dt.datetime:
+    def deserialize(value: str) -> uuid.UUID:
         return uuid.UUID(value)
 
 
@@ -157,26 +158,13 @@ class TimeSerializer(ScalarTypeSerializer):
         return obj.isoformat()
 
     @staticmethod
-    def deserialize(value: str) -> dt.date:
+    def deserialize(value: str) -> dt.time:
         return dt.time.fromisoformat(value)
-
-
-#  class EnumSerializer(ScalarTypeSerializer):
-#      type: enum.Enum
-
-#      @staticmethod
-#      def serialize(obj: enum.Enum) -> Any:
-#          # Serialise enums to their value.
-#          # TODO value may not be serializable
-#          return obj.value
-
-#      @staticmethod
-#      def deserialize(value: Any) -> enum.Enum:
 
 
 class MultiTypeSerializer:
 
-    default_serializers: Tuple[ScalarTypeSerializer] = (
+    default_serializers = (
         StringSerializer,
         IntSerializer,
         FloatSerializer,
@@ -237,13 +225,14 @@ class MultiTypeSerializer:
 
         if isinstance(t, type):
             if issubclass(t, enum.Enum):
-                for item in t:
+                for item in t:  # type: ignore
                     if item.value == value:
                         return item
                 raise Exception(f"cannot find an item in Enum {t} with value {value}")
             if issubclass(t, tuple):
                 return t(*value)
 
+        # TODO deal with List without args, e.g. foo: List = ['a', 'b']
         if hasattr(t, "__origin__") and hasattr(t, "__args__"):
             origin = t.__origin__
             args = t.__args__

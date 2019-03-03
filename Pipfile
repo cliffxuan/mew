@@ -8,6 +8,8 @@ hypothesis = "*"
 python-dateutil = "*"
 pytest = "*"
 pytest-cov = "*"
+flake8 = "*"
+pdbpp = "*"
 
 [packages]
 mew = {editable = true,path = "."}
