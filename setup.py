@@ -18,7 +18,7 @@ packages = ['mew']
 
 requires = [
     'backports-datetime-fromisoformat;python_version<"3.7"',
-    'pyyaml==4.2b4'
+    'pyyaml==5.4'
 ]
 
 about = {}
